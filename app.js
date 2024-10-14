@@ -1,7 +1,7 @@
 
-const express = require('express');
-const axios = require('axios');
-const data = require('./data');
+import express from 'express';
+import axios from 'axios';
+import { filterDataStart, populatePredictionData } from './data.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -57,9 +57,9 @@ app.get('/forecast', async (req, res) => {
             return { line: line.trim() };
         });
 
-        let predictions = data.filterDataStart(forecastData);
+        let predictions = filterDataStart(forecastData);
         const dates = predictions[0].line
-        let predictionData = data.populatePredictionData(predictions, dates);
+        let predictionData = populatePredictionData(predictions, dates);
 
         // Update the cache
         cache.data = predictionData;

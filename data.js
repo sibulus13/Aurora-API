@@ -5,7 +5,7 @@
  * @returns {Array<{line: string}>} The prediction data
  */
 
-function filterDataStart(data) {
+export function filterDataStart(data) {
     let prediction_start_index = -1;
     const prediction_prefix_substring = 'NOAA Kp index breakdown';
     const prediction_arr_len = 9;
@@ -29,7 +29,7 @@ function filterDataStart(data) {
  * @param {string} dates - The dates for the forecast
  * @returns {Array<{date: string, values: Array<{hour: number, kp: string}>}>} The populated prediction data
  */
-function populatePredictionData(predictions, dates) {
+export function populatePredictionData(predictions, dates) {
     // Use a regular expression to match the date format
     const datePattern = /([A-Z][a-z]{2} \d{1,2})/g; // Matches Dates such as "Oct 10", "Oct 11", "Oct 12"
     const prediction_dates = dates.match(datePattern);
@@ -46,8 +46,8 @@ function populatePredictionData(predictions, dates) {
 
     for (let i = 1; i < predictions.length; i++) {
         const lineParts = predictions[i].line.split(/\s{2,}/).filter(part => part.trim() !== '');
-        console.log(lineParts);
         if (lineParts.length !== 4) {
+            // Skip lines that do not have the expected number of parts
             continue
         }
         let timePeriod = lineParts[0];
@@ -68,8 +68,3 @@ function populatePredictionData(predictions, dates) {
     }
     return predictionData;
 }
-
-module.exports = {
-    filterDataStart,
-    populatePredictionData
-};
